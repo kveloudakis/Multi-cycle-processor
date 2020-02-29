@@ -1,0 +1,214 @@
+------------------------------------------------------------------------------------
+---- Company: 
+---- Engineer: 
+---- 
+---- Create Date:    21:51:53 03/25/2019 
+---- Design Name: 
+---- Module Name:    OneCycleDatapapath - Behavioral 
+---- Project Name: 
+---- Target Devices: 
+---- Tool versions: 
+---- Description: 
+----
+---- Dependencies: 
+----
+---- Revision: 
+---- Revision 0.01 - File Created
+---- Additional Comments: 
+----
+------------------------------------------------------------------------------------
+--library IEEE;
+--use IEEE.STD_LOGIC_1164.ALL;
+--use IEEE.STD_LOGIC_SIGNED.ALL;
+--use IEEE.STD_LOGIC_ARITH.ALL;
+--
+---- Uncomment the following library declaration if using
+---- arithmetic functions with Signed or Unsigned values
+----use IEEE.NUMERIC_STD.ALL;
+--
+---- Uncomment the following library declaration if instantiating
+---- any Xilinx primitives in this code.
+----library UNISIM;
+----use UNISIM.VComponents.all;
+--
+--entity OneCycleDatapapath is
+--	port (	PC_sel : in  STD_LOGIC;
+--		PC_LdEn : in  STD_LOGIC;
+--		RF_WrEn : in  STD_LOGIC;
+--		RF_WrData_sel : in  STD_LOGIC; --Mem out dont care
+--		RF_B_sel  : in  STD_LOGIC;
+--		ImmExt_s: in  STD_LOGIC:= '0';
+--		ALU_Bin_sel : in  STD_LOGIC;--Immed
+--		ALU_func  : in  STD_LOGIC_VECTOR (3 downto 0);--add	
+--		Mem_WrEn  : in  STD_LOGIC ;
+--		Clk : in  STD_LOGIC;
+--		Opi : in  STD_LOGIC;
+--		rst  : in  STD_LOGIC);
+--end OneCycleDatapapath;
+--
+--architecture Behavioral of OneCycleDatapapath is
+-------------------------------------------------------------------------------------------
+-- COMPONENT DECSTAGE is 
+--    PORT(	--ImmExt : in  STD_LOGIC;
+--         Instr : IN  std_logic_vector(31 downto 0);
+--         RF_WrEn : IN  std_logic;
+--         ALU_Out : IN  std_logic_vector(31 downto 0);
+--         MEM_Out : IN  std_logic_vector(31 downto 0);
+--         RF_WrData_sel : IN  std_logic;
+--         RF_B_sel : IN  std_logic;
+--         Clk : IN  std_logic;
+--			rst : IN  std_logic;
+--         Immed : OUT  std_logic_vector(31 downto 0);
+--         RF_A : OUT  std_logic_vector(31 downto 0);
+--         RF_B : OUT  std_logic_vector(31 downto 0)
+--        );
+--    END COMPONENT;
+--
+--component Mux2x1 is
+--  Port( inA : in  STD_LOGIC_VECTOR (31 downto 0);
+--           inB : in  STD_LOGIC_VECTOR (31 downto 0);
+--           ctr : in  STD_LOGIC;
+--           mux_out : out  STD_LOGIC_VECTOR (31 downto 0));
+--end component; 
+--
+--component Mux5bit is
+--   Port ( 	  first  : in std_logic_vector(4 downto 0);
+--			  second : in std_logic_vector(4 downto 0);
+--	        sel:in std_logic;
+--           Dout : out  STD_LOGIC_VECTOR (4 downto 0));
+--end component; 
+--
+--component registerfile is
+--   Port (  Ard1 : in  STD_LOGIC_VECTOR (4 downto 0);
+--           Ard2 : in  STD_LOGIC_VECTOR (4 downto 0);
+--           Awr : in  STD_LOGIC_VECTOR (4 downto 0);
+--           Din : in  STD_LOGIC_VECTOR (31 downto 0);
+--           WE : in  STD_LOGIC; 
+--           CLK : in  STD_LOGIC;
+--			  rst : in  STD_LOGIC;
+--           Dout1 : out  STD_LOGIC_VECTOR (31 downto 0);
+--           Dout2 : out  STD_LOGIC_VECTOR (31 downto 0));
+--end component;
+--
+--
+--	 
+--component ALUSTAGE is
+--    PORT(
+--         RF_A : IN  std_logic_vector(31 downto 0);
+--         RF_B : IN  std_logic_vector(31 downto 0);
+--         Immed : IN  std_logic_vector(31 downto 0);
+--         ALU_Bin_sel : IN  std_logic;
+--         ALU_func : IN  std_logic_vector(3 downto 0);
+--         ALU_out : OUT  std_logic_vector(31 downto 0);
+--         ALUzero : OUT  std_logic;
+--         ALUovf : OUT  std_logic;
+--         ALUcout : OUT  std_logic
+--        );
+--    end component;
+--	 
+--COMPONENT IFSTAGE  is
+--    PORT(
+--         PC_Immed : IN  std_logic_vector(31 downto 0);
+--         PC_Sel : IN  std_logic;
+--         PC_LdEn : IN  std_logic;
+--         Reset : IN  std_logic;
+--         Clk : IN  std_logic;
+--         pc_out : OUT  std_logic_vector(31 downto 0)
+--        );
+--    END COMPONENT;
+--	 
+--COMPONENT SECRETMEM is
+--    PORT(
+--         clk : IN  std_logic;
+--         Mem_WrEn : IN  std_logic;
+--         ALU_MEM_Addr : IN  std_logic_vector(10 downto 0);
+--         MEM_DataIn : IN  std_logic_vector(31 downto 0);
+--         MEM_DataOut : OUT  std_logic_vector(31 downto 0);
+--			inst_addr : in std_logic_vector(10 downto 0);
+--			inst_dout : out std_logic_vector(31 downto 0));
+--    END COMPONENT;
+--	 
+--component lbbox is
+--		PORT(
+--			memorout : in  STD_LOGIC_VECTOR (31 downto 0);
+--         Opi  : in  STD_LOGIC;
+--         outlb : out  STD_LOGIC_VECTOR (31 downto 0));
+--end component;
+--
+-------------------------------------------------------------------------------------------
+--signal ifstg_out,alout,mem_out,memi_out,immmed_out,instr_s,reg_a,reg_b,aloutplus,memilb_out : STD_LOGIC_VECTOR (31 downto 0);
+--signal datadrr : STD_LOGIC_VECTOR (10 downto 0);
+--signal dummy1 , dummy2 , dummy3 :   STD_LOGIC;
+--signal mux_out_5bit: STD_LOGIC_VECTOR (4 downto 0);
+--signal mux_out_32bit: STD_LOGIC_VECTOR (31 downto 0);
+-------------------------------------------------------------------------------------------
+--	 
+--begin
+--aloutplus<=alout + "10000000000"; 
+--IFHANDLER : IFSTAGE PORT MAP(
+--							PC_Immed=>immmed_out,
+--							PC_Sel=>PC_sel,
+--							PC_LdEn=>PC_LdEn,
+--							Reset=>rst,
+--							Clk=>Clk,
+--							pc_out=>ifstg_out);
+--							
+--DECODE : DECSTAGE  PORT MAP ( --ImmExt=>ImmExt_s,
+--							Instr=>instr_s,
+--							RF_WrEn=>RF_WrEn ,
+--							ALU_Out=>alout,
+--							MEM_Out=>memilb_out,
+--							RF_WrData_sel=>RF_WrData_sel, 
+--							RF_B_sel=>RF_B_sel  ,
+--							Clk=>Clk,
+--							rst=>rst,
+--							Immed=>immmed_out,
+--							RF_A=>reg_a,
+--							RF_B=>reg_b);
+--
+--
+--							
+--LOGIC : ALUSTAGE PORT MAP (
+--							RF_A=>reg_a,
+--							RF_B=>reg_b,
+--							Immed=>immmed_out,
+--							ALU_Bin_sel=>ALU_Bin_sel,
+--							ALU_func=>ALU_func,
+--							ALU_out=>alout,
+--							ALUzero=>dummy1,
+--							ALUovf=>dummy2,
+--							ALUcout=>dummy3);
+--			
+--MEMORY : SECRETMEM PORT MAP(
+--							clk =>Clk,
+--							Mem_WrEn =>Mem_WrEn,
+--							inst_addr=>ifstg_out(12 downto 2),
+--							inst_dout=>instr_s,
+--							ALU_MEM_Addr=>aloutplus(10 downto 0),
+--							MEM_DataIn=>reg_b,
+--							MEM_DataOut=>memi_out);
+--							
+--lbfunc : lbbox PORT MAP (
+--							memorout=>memi_out,
+--							opi=>Opi,
+--							outlb=>memilb_out);
+--
+--end Behavioral;
+--
+--							
+----Incrementor : Incrementx400 PORT MAP (
+----							input=>alout(12 downto 2),
+----							output=>datadrr);
+--							
+--	
+----		ifstg_out
+----		alout
+----		mem_out
+----		memi_out
+----		immmed_out
+----		instr_s
+----		reg_a
+----		reg_b 
+--
+--
+--
